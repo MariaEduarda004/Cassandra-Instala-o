@@ -1,0 +1,21 @@
+services:
+  cassandra:
+    image: cassandra:4.1
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_CLUSTER_NAME: "LocalCluster"
+      MAX_HEAP_SIZE: "1024M"
+      HEAP_NEWSIZE: "256M"
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'SHOW VERSION;' 127.0.0.1 9042 || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+
+volumes:
+  cassandra_data:
